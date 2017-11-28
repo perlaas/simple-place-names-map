@@ -1,0 +1,209 @@
+http://overpass-api.de/api/interpreter?data=[out:json];area[name="Danmark"];(relation[name~"urup$"](area););out center qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];area[name=%22Danmark%22];(node[name~%22urup$%22](area););out%20qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];area[name="Danmark"][name="Sverige"];(relation[name~"urup$"](area););out center qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];(area[name="Danmark"];area[name="Sverige"]);(node[name~"urup$"](area););out qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];(area[name="Danmark"];area[name="Sverige"])->.a;(node[name~"urup$"](a););out qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];area[name="Danmark"];(node[name~"urup$"](area););area[name="Sverige"];(node[name~"urup$"](area););out center qt;
+
+Works:
+http://overpass-api.de/api/interpreter?data=[out:json];area[name="Danmark"];(node[name~"urup$"](area););out qt;area[name="Sverige"];(node[name~"urup$"](area););out qt;
+
+area["name"="Nordrhein-Westfalen"]->.boundaryarea;
+(
+node(area.boundaryarea)[amenity=bank];
+way(area.boundaryarea)[amenity=bank];>;
+rel(area.boundaryarea)[amenity=bank];>;
+);
+out meta;
+
+
+<osm-script output="xml" timeout="200"> 
+ <id-query {{nominatimArea:Austria}} into="area"/> 
+ <union>
+      <query type="node">
+           <has-kv k="amenity" v="bank"/> 
+           <area-query from="area"/>
+      </query>
+      <query type="way">
+           <has-kv k="amenity" v="bank"/> 
+           <area-query from="area"/>
+      </query>
+      <query type="relation">
+           <has-kv k="amenity" v="bank"/> 
+           <area-query from="area"/>
+      </query>
+ </union>
+ <union>
+      <item />
+      <recurse type="down"/>
+ </union>
+ <print mode="body" />
+</osm-script>
+
+
+http://overpass-api.de/api/interpreter?data=[out:json];area[name=%22Sverige%22];(node[name=%22Haltona%22][place=%22isolated_dwelling%22](area););out;
+area[name=%22Sverige%22];
+
+(node[name=%22Haltona%22][place=%22isolated_dwelling%22](area););out;
+
+http://overpass-api.de/api/interpreter?data=[out:json];(node[name=%22Ekeby%22];);out%20qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];(node[name="Ekeby"];);out;
+
+http://overpass-api.de/api/interpreter?data=[out:json];(way[name=%22Ekeby%22];);out;
+
+http://overpass-api.de/api/interpreter?data=[out:json];(node[name=%22Mariehamn%22];);out;
+
+http://overpass-api.de/api/interpreter?data=[out:json];area[name=%22Finland%22];(node[name=%22Mariehamn%22](area););out;
+http://overpass-api.de/api/interpreter?data=[out:json];area[name=%22Suomi%22];(node[name=%22Mariehamn%22](area););out;
+
+
+QuickOSM
+
+<osm-script output="xml" timeout="25">
+    <id-query {{geocodeArea:Sverige}} into="area_0"/>
+    <union>
+        <query type="node">
+            <has-kv k="name" v="Sunnansjö"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="way">
+            <has-kv k="place" v="isolated_dwelling"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="relation">
+            <has-kv k="place" v="isolated_dwelling"/>
+            <area-query from="area_0"/>
+        </query>
+    </union>
+    <union>
+        <item/>
+        <recurse type="down"/>
+    </union>
+    <print mode="body"/>
+</osm-script>
+
+<osm-script output="xml" timeout="25">
+    <id-query {{geocodeArea:Sverige}} into="area_0"/>
+    <union>
+        <query type="node">
+            <has-kv k="name" v="Ekeby"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="way">
+            <has-kv k="name" v="Ekeby"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="relation">
+            <has-kv k="name" v="Ekeby"/>
+            <area-query from="area_0"/>
+        </query>
+    </union>
+    <union>
+        <item/>
+        <recurse type="down"/>
+    </union>
+    <print mode="body"/>
+</osm-script>
+
+Do not work ^kyrka ?:
+
+Works:
+<osm-script output="xml" timeout="250">
+    <id-query {{geocodeArea:Sverige}} into="area_0"/>
+    <union>
+        <query type="node">
+            <has-kv k="name" regv="kyrka$"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="way">
+            <has-kv k="name" regv="kyrka$"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="relation">
+            <has-kv k="name" regv="kyrka$"/>
+            <area-query from="area_0"/>
+        </query>
+    </union>
+    <union>
+        <item/>
+        <recurse type="down"/>
+    </union>
+    <print mode="body"/>
+</osm-script>
+
+Works:
+<osm-script output="xml" timeout="250">
+    <id-query {{geocodeArea:Sverige}} into="area_0"/>
+    <union>
+        <query type="node">
+            <has-kv k="name" regv="kyrka"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="way">
+            <has-kv k="name" regv="kyrka"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="relation">
+            <has-kv k="name" regv="kyrka"/>
+            <area-query from="area_0"/>
+        </query>
+    </union>
+    <union>
+        <item/>
+        <recurse type="down"/>
+    </union>
+    <print mode="body"/>
+</osm-script>
+
+
+<osm-script output="xml" timeout="25">
+    <id-query {{geocodeArea:Sverige}} into="area_0"/>
+    <union>
+        <query type="node">
+            <has-kv k="amenity" v="place_of_worship"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="way">
+            <has-kv k="amenity" v="place_of_worship"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="relation">
+            <has-kv k="amenity" v="place_of_worship"/>
+            <area-query from="area_0"/>
+        </query>
+    </union>
+    <union>
+        <item/>
+        <recurse type="down"/>
+    </union>
+    <print mode="body"/>
+</osm-script>
+
+<osm-script output="xml" timeout="25">
+    <id-query {{geocodeArea:Sverige}} into="area_0"/>
+    <union>
+        <query type="node">
+            <has-kv k="building" v="church"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="way">
+            <has-kv k="building" v="church"/>
+            <area-query from="area_0"/>
+        </query>
+        <query type="relation">
+            <has-kv k="building" v="church"/>
+            <area-query from="area_0"/>
+        </query>
+    </union>
+    <union>
+        <item/>
+        <recurse type="down"/>
+    </union>
+    <print mode="body"/>
+</osm-script>
