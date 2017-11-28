@@ -1,0 +1,47 @@
+http://overpass-api.de/api/interpreter?data=[out:json];area[name="Danmark"];(relation[name~"urup$"](area););out center qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];area[name=%22Danmark%22];(node[name~%22urup$%22](area););out%20qt;
+
+Tests does not work:
+http://overpass-api.de/api/interpreter?data=[out:json];area[name="Danmark"][name="Sverige"];(relation[name~"urup$"](area););out center qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];(area[name="Danmark"];area[name="Sverige"]);(node[name~"urup$"](area););out qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];(area[name="Danmark"];area[name="Sverige"])->.a;(node[name~"urup$"](a););out qt;
+
+http://overpass-api.de/api/interpreter?data=[out:json];area[name="Danmark"];(node[name~"urup$"](area););area[name="Sverige"];(node[name~"urup$"](area););out center qt;
+
+Works:
+http://overpass-api.de/api/interpreter?data=[out:json];area[name="Danmark"];(node[name~"urup$"](area););out qt;area[name="Sverige"];(node[name~"urup$"](area););out qt;
+
+area["name"="Nordrhein-Westfalen"]->.boundaryarea;
+(
+node(area.boundaryarea)[amenity=bank];
+way(area.boundaryarea)[amenity=bank];>;
+rel(area.boundaryarea)[amenity=bank];>;
+);
+out meta;
+
+
+<osm-script output="xml" timeout="200"> 
+ <id-query {{nominatimArea:Austria}} into="area"/> 
+ <union>
+      <query type="node">
+           <has-kv k="amenity" v="bank"/> 
+           <area-query from="area"/>
+      </query>
+      <query type="way">
+           <has-kv k="amenity" v="bank"/> 
+           <area-query from="area"/>
+      </query>
+      <query type="relation">
+           <has-kv k="amenity" v="bank"/> 
+           <area-query from="area"/>
+      </query>
+ </union>
+ <union>
+      <item />
+      <recurse type="down"/>
+ </union>
+ <print mode="body" />
+</osm-script>
