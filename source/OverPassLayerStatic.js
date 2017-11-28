@@ -180,6 +180,7 @@ L.OverPassLayerStatic = L.FeatureGroup.extend({
     if (this.options.debug) {
       console.debug("load Pois");
     }
+	  document.getElementById("statusOSM").innerHTML = 'Söker OSM..';
 
 	
 	  var queryWithMapCoordinates = this.options.query;
@@ -193,6 +194,7 @@ L.OverPassLayerStatic = L.FeatureGroup.extend({
 		if (this.status >= 200 && this.status < 400) {
 		  var reference = {instance: self};
 		  self.options.callback.call(reference, JSON.parse(this.response));
+		  document.getElementById("statusOSM").innerHTML = 'OSM klar';
 		  if (self.options.debug) {
 			console.debug('queryCount: ' + queryCount + ' - finishedCount: ' + finishedCount);
 		  }

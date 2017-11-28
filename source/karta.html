@@ -39,7 +39,8 @@
 	  <option value="norden">Norden</option>
 	  <option value="all">Världen</option>
 	</select> 
-	<button onclick="search()">Sök</button>  Röd: LM ortnamn Grön: OSM nod Blå: OSM way center Svart: OSM relation center 
+	<button onclick="search()">Sök</button><div id="statusOSM" 	style="float: right" align="right"></div>
+	Röd: LM ortnamn Grön: OSM nod Blå: OSM way center Svart: OSM relation center 
 	<br>
 	Enbart för test. Några brister: Max 200 ortnamn från LM ortnamn. Begränsning i antal anrop till OSM-overpass API så man kan tvingas vänta till nytt sök.
 	<div id="mapid" style="width:100%; height:600px;"></div>
@@ -70,8 +71,6 @@ if (q) {
 }	
 var opl;
 var opl2;
-var opl3;
-var opl4;
 
 function search() {
 	lmtyp = 'STARTS_WITH';
@@ -134,8 +133,17 @@ function search() {
 		mymap.removeLayer(opl);
 	}
 	if (opl2) mymap.removeLayer(opl2);
-	if (opl3) mymap.removeLayer(opl3);
-	if (opl4) mymap.removeLayer(opl4);
+
+	var qOSM = '';
+	if (db == 'OSMnode' || db == 'all' || db == 'OSM') {
+		qOSM = qOSM + qNode;
+	}
+	if (db == 'OSMway' || db == 'all' || db == 'OSM') {
+		qOSM = qOSM + qWay;
+	}
+	if (db == 'OSMrel' || db == 'all' || db == 'OSM') {
+		qOSM = qOSM + qRel;
+	}
 
 	if (db == 'LM' || db == 'all') {
 		opl = new L.OrtnamnLMStatic({
@@ -143,23 +151,11 @@ function search() {
 		});
 		mymap.addLayer(opl);
 	}
-	if (db == 'OSMnode' || db == 'all' || db == 'OSM') {
+	if (db == 'OSMnode' || db == 'OSMway' || db == 'OSMrel' || db == 'all' || db == 'OSM') {
 		opl2 = new L.OverPassLayerStatic({
-			'query': qNode,
+			'query': qOSM,
 		});
 		mymap.addLayer(opl2);
-	}
-	if (db == 'OSMway' || db == 'all' || db == 'OSM') {
-		opl3 = new L.OverPassLayerStatic({
-			'query': qWay,
-		});
-		mymap.addLayer(opl3);
-	}
-	if (db == 'OSMrel' || db == 'all' || db == 'OSM') {
-		opl4 = new L.OverPassLayerStatic({
-			'query': qRel,
-		});
-		mymap.addLayer(opl4);
 	}
 	 
 }
