@@ -1,0 +1,44 @@
+//https://tora.entryscape.net/store/search?type=solr&query=(title:broby)&limit=10
+//'query': 'type=solr&query=(title:' + q + ')+AND+rdfType:https\%3A%2F%2Fdata.riksarkivet.se%2Ftora%2Fschema%2FHistoricalSettlementUnit+AND+context:https\%3A%2F%2Ftora.entryscape.net%2Fstore%2F26&limit=10',
+//'query': 'type=solr&query=(title:' + q + ')+AND+rdfType:https://data.riksarkivet.se/tora/schema/HistoricalSettlementUnit+AND+context:https://tora.entryscape.net/store/26&limit=10',
+//'query': 'type=solr&query=(title:' + q + escape(encodeURIComponent(')+AND+rdfType:https://data.riksarkivet.se/tora/schema/HistoricalSettlementUnit+AND+context:https://tora.entryscape.net/store/26&limit=10')),
+//'query': 'type=solr&query=(title:' + q + ')+AND+rdfType:' + escape(encodeURIComponent('https://data.riksarkivet.se/tora/schema/HistoricalSettlementUnit')) + '+AND+context:' + escape(encodeURIComponent('https://tora.entryscape.net/store/26')) + '&limit=10',
+//'query': 'type=solr&query=(title:' + q + ')+AND+rdfType:' + escape('https://data.riksarkivet.se/tora/schema/HistoricalSettlementUnit') + '+AND+context:' + escape('https://tora.entryscape.net/store/26') + '&limit=10',
+//'query': 'type=solr&query=(title:' + q + ')+AND+rdfType:' + escape(encodeURIComponent('https:\//data.riksarkivet.se/tora/schema/HistoricalSettlementUnit')) + '+AND+context:' + escape(encodeURIComponent('https:\//tora.entryscape.net/store/26')) + '&limit=10',
+//'query': 'type=solr&query=(title:' + q + ')+AND+rdfType:' + escape(encodeURIComponent('https\//data.riksarkivet.se/tora/schema/HistoricalSettlementUnit')) + '+AND+context:' + escape(encodeURIComponent('https\//tora.entryscape.net/store/26')) + '&limit=10',
+//'query': 'type=solr&query=(title:' + q + ')+AND+rdfType:https\\' + escape(encodeURIComponent('//data.riksarkivet.se/tora/schema/HistoricalSettlementUnit')) + '+AND+context:https\\' + escape(encodeURIComponent('//tora.entryscape.net/store/26')) + '&limit=10',
+
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:broby)+AND+rdfType:https\%3A%2F%2Fdata.riksarkivet.se%2Ftora%2Fschema%2FHistoricalSettlementUnit+AND+context:https\%3A%2F%2Ftora.entryscape.net%2Fstore%2F26&limit=10
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:bälinge)+AND+rdfType:https://data.riksarkivet.se/tora/schema/HistoricalSettlementUnit+AND+context:https://tora.entryscape.net/store/26&limit=10
+
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:bälinge)+AND+rdfType:https%3A%2F%2Fdata.riksarkivet.se%2Ftora%2Fschema%2FHistoricalSettlementUnit+AND+context:https%3A%2F%2Ftora.entryscape.net%2Fstore%2F26&limit=10
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:broby)+AND+rdfType:https://data.riksarkivet.se/tora/schema/HistoricalSettlementUnit+AND+context:https://tora.entryscape.net/store/26&limit=10
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:broby)+AND+rdfType:https://data.riksarkivet.se/tora/schema/HistoricalSettlementUnit&limit=10
+
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:broby)+AND+context:https\%3A%2F%2Ftora.entryscape.net%2Fstore%2F26&limit=10
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:broby)+AND+context:https:\//tora.entryscape.net/store/26&limit=10
+
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:torp)+AND+rdfType:https%253A%252F%252Fdata.riksarkivet.se%252Ftora%252Fschema%252FHistoricalSettlementUnit+AND+context:https%253A%252F%252Ftora.entryscape.net%252Fstore%252F26&limit=10
+
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:torp)+AND+rdfType:https%3A//data.riksarkivet.se/tora/schema/HistoricalSettlementUnit+AND+context:https%3A//tora.entryscape.net/store/26&limit=10
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:torp)+AND+rdfType:https%253A%252F%252Fdata.riksarkivet.se%252Ftora%252Fschema%252FHistoricalSettlementUnit+AND+context:https%253A%252F%252Ftora.entryscape.net%252Fstore%252F26&limit=10
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:torp)+AND+rdfType:https%252F%252Fdata.riksarkivet.se%252Ftora%252Fschema%252FHistoricalSettlementUnit+AND+context:https%252F%252Ftora.entryscape.net%252Fstore%252F26&limit=10
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:torp)+AND+rdfType:https\%252F%252Fdata.riksarkivet.se%252Ftora%252Fschema%252FHistoricalSettlementUnit+AND+context:https\%252F%252Ftora.entryscape.net%252Fstore%252F26&limit=10
+
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:torp)+AND+rdfType:https\%2F%2Fdata.riksarkivet.se%2Ftora%2Fschema%2FHistoricalSettlementUnit+AND+context:https\%2F%2Ftora.entryscape.net%2Fstore%2F26&limit=10
+
+https://tora.entryscape.net/store/search?type=solr&query=(title:torp)+AND+rdfType:https\%3A%2F%2Fdata.riksarkivet.se%2Ftora%2Fschema%2FHistoricalSettlementUnit+AND+context:https\%3A%2F%2Ftora.entryscape.net%2Fstore%2F26&limit=10
+
