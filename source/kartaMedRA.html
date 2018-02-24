@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>karta</title>  
+    <meta charset="utf-8" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+  integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+  crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+  integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+  crossorigin=""></script>
+    <link rel="stylesheet" href="OverPassLayer.css" />
+    <script src="TORALayerStatic.js"></script>
+    <!-- <script src="OrtnamnLMStatic.js"></script> -->
+    <!-- <script src="OverPassLayerStatic.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4.js"></script>
+    <!-- <script src="proj4-compressed.js"></script> -->
+  </head>
+  <body>
+	<input type="text" name="name" id="search">
+	 <select id="searchtype">
+	  <option value="exact">Exakt</option>
+	  <option value="starts">Börjar</option>
+	  <option value="ends">Slutar</option>
+	  <option value="contains">Innehåller</option>
+	</select> 
+	 <select id="database">
+	  <option value="RA">RA</option>
+	  <option value="all">Alla</option>
+	  <option value="LM">LM ortnamn</option>
+	  <option value="OSM">OSM</option>
+	  <option value="OSMnode">OSM nod</option>
+	  <option value="OSMway">OSM way</option>
+	  <option value="OSMrel">OSM relation</option>
+	</select> 
+	 <select id="area">
+	  <option value="Sverige">Sv</option>
+	  <option value="Suomi">Fin</option>
+	  <option value="Norge">Nor</option>
+	  <option value="Danmark">Dan</option>
+	  <option value="norden">Norden</option>
+	  <option value="all">Världen</option>
+	</select> 
+	<button onclick="search()">Sök</button>  Röd: LM ortnamn Grön: OSM nod Blå: OSM way center Svart: OSM relation center 
+	<br>
+	Enbart för test. Några brister: Max 200 ortnamn från LM ortnamn. Begränsning i antal anrop till OSM-overpass API så man kan tvingas vänta till nytt sök.
+	<div id="mapid" style="width:100%; height:600px;"></div>
+	<script>    
+	var attr_osm = 'Map data &copy; <a href="http://openstreetmap.org/">OpenStreetMap</a> contributors';
+	var attr_lm = 'Map data &copy; <a href="http://openstreetmap.org/">Lantmäteriet</a> contributors';
+var attr = "© <a href='http://proj4js.org/'>proj4js</a> © <a href='https://github.com/kartenkarsten/leaflet-layer-overpass'>leaflet-layer-overpass</a> |"
+	
+//var mymap = L.map('mapid').setView([51.505, -0.09], 15);
+var mymap = L.map('mapid').setView([60, 15], 6);
+
+//var credits = L.control.attribution().addTo(mymap);
+//credits.addAttribution();
+ 
+var osm = new L.TileLayer(
+    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        'opacity': 1.0,
+        'attribution': [attr_osm, attr_lm, attr].join(', ')
+    }
+).addTo(mymap);
+
+var q = getParameterByName('q'); 
+
+if (q) {
+    document.querySelector('#search').value = q;
+	search();
+}	
+var opl;
+var opl2;
+var opl3;
+var opl4;
+var opl5;
+
+function search() {
+	lmtyp = 'STARTS_WITH';
+	osmq = '%22';
+	q = document.querySelector('#search').value;
+	qt = document.querySelector('#searchtype').value;
+	db = document.querySelector('#database').value;
+	area = document.querySelector('#area').value;
+	if (qt == 'exact') {
+		lmtyp = 'EQUALS';
+		osmq = '=%22' + q;
+	}
+	if (qt == 'starts') {
+		lmtyp = 'STARTS_WITH';
+		osmq = '~%22^' + q;
+	}
+	if (qt == 'ends') {
+		lmtyp = 'ENDS_WITH';
+		osmq = '~%22' + q + '$';
+	}
+	if (qt == 'contains') {
+		lmtyp = 'CONTAINS';
+		osmq = '~%22' + q;
+	}
+	var areapre = '';
+	//var areapost = '';
+	if (area != 'all') {
+		areapre = 'area[name=%22' + area + '%22];';
+		//areapost = '(area)';
+	}
+	//var qNode = areapre + '(node[name' + osmq + '%22]' + areapost + ';);out qt;';
+	//var qWay = areapre + '(way[name' + osmq + '%22]' + areapost + ';);out center qt;';
+	//var qRel = areapre + '(relation[name' + osmq + '%22]' + areapost + ';);out center qt;';
+	var qNode = createOSMoverpassQuery(areapre, 'node', osmq);
+	var qWay = createOSMoverpassQuery(areapre, 'way', osmq);
+	var qRel = createOSMoverpassQuery(areapre, 'relation', osmq);
+	if (area == 'norden') {
+		areapre = 'area[name=%22' + 'Danmark' + '%22];';
+		qNode = createOSMoverpassQuery(areapre, 'node', osmq);
+		qWay = createOSMoverpassQuery(areapre, 'way', osmq);
+		qRel = createOSMoverpassQuery(areapre, 'relation', osmq);
+		//qNode = areapre + '(node[name' + osmq + '%22]' + areapost + ';);out qt;';
+		
+		areapre = 'area[name=%22' + 'Sverige' + '%22];';
+		qNode = qNode + createOSMoverpassQuery(areapre, 'node', osmq);
+		qWay = qWay + createOSMoverpassQuery(areapre, 'way', osmq);
+		qRel = qRel + createOSMoverpassQuery(areapre, 'relation', osmq);
+		
+		areapre = 'area[name=%22' + 'Suomi' + '%22];';
+		qNode = qNode + createOSMoverpassQuery(areapre, 'node', osmq);
+		qWay = qWay + createOSMoverpassQuery(areapre, 'way', osmq);
+		qRel = qRel + createOSMoverpassQuery(areapre, 'relation', osmq);
+		
+		areapre = 'area[name=%22' + 'Norge' + '%22];';
+		qNode = qNode + createOSMoverpassQuery(areapre, 'node', osmq);
+		qWay = qWay + createOSMoverpassQuery(areapre, 'way', osmq);
+		qRel = qRel + createOSMoverpassQuery(areapre, 'relation', osmq);
+	}
+	if (opl) {
+		mymap.removeLayer(opl);
+	}
+	if (opl2) mymap.removeLayer(opl2);
+	if (opl3) mymap.removeLayer(opl3);
+	if (opl4) mymap.removeLayer(opl4);
+	if (opl5) mymap.removeLayer(opl5);
+
+	if (db == 'LM' || db == 'all') {
+		opl = new L.OrtnamnLMStatic({
+			'query': 'ortnamn=' + q + '&match=' + lmtyp + '&page=1&pageSize=200',
+		});
+		mymap.addLayer(opl);
+	}
+	if (db == 'OSMnode' || db == 'all' || db == 'OSM') {
+		opl2 = new L.OverPassLayerStatic({
+			'query': qNode,
+		});
+		mymap.addLayer(opl2);
+	}
+	if (db == 'OSMway' || db == 'all' || db == 'OSM') {
+		opl3 = new L.OverPassLayerStatic({
+			'query': qWay,
+		});
+		mymap.addLayer(opl3);
+	}
+	if (db == 'OSMrel' || db == 'all' || db == 'OSM') {
+		opl4 = new L.OverPassLayerStatic({
+			'query': qRel,
+		});
+		mymap.addLayer(opl4);
+	}
+	if (db == 'all' || db == 'RA') {
+		opl5 = new L.TORALayerStatic({
+			//Works
+			'query': 'type=solr&query=(title:' + q + ')+AND+rdfType:https\\' + encodeURIComponent('://data.riksarkivet.se/tora/schema/HistoricalSettlementUnit') + '+AND+context:https\\' + encodeURIComponent('://tora.entryscape.net/store/26') + '&limit=10',
+		});
+		mymap.addLayer(opl5)
+	}
+}
+
+function createOSMoverpassQuery(areapre, type, osmq) {
+	var areapost = '';
+	if (areapre != '') {
+		areapost = '(area)';
+	}
+	var center = '';
+	if (type != 'node') {
+		var center = 'center ';
+	}
+	var qOSM = areapre + '('  + type + '[name' + osmq + '%22]' + areapost + ';);out ' + center + 'qt;';
+	return qOSM;
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+</script>
+</body>
+</html>
